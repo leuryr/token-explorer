@@ -14,10 +14,12 @@
     "@tailwindcss/vite": "^4.1.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.1.7",
+    "viem": "^2.30.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
+    "@svgr/plugin-svgo": "^8.1.0",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.4.1",
@@ -29,6 +31,7 @@
     "prettier": "3.5.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vite-plugin-svgr": "^4.3.0"
   }
 }

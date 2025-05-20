@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { SwapPanel } from "./SwapPanel";
+import "./App.css";
+import { TokenInfo, TokenList } from "./types/types";
+
+const tokenList: TokenList = [
+  { symbol: "USDC", chainId: "1" },
+  { symbol: "USDT", chainId: "137" },
+  { symbol: "ETH", chainId: "8453" },
+  { symbol: "WBTC", chainId: "1" },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [amount, setAmount] = useState("");
+  const [sourceToken, setSourceToken] = useState<TokenInfo | null>(null);
+  const [targetToken, setTargetToken] = useState<TokenInfo | null>(null);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      <header className="flex flex-col items-center justify-end min-h-[20vh]">
+        <h1 className="text-2xl">Token Price Explorer</h1>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Use the interface below to explore the price of different tokens.
+          <br />
+          Select a token and enter the amount in USD to see the equivalent value
+          in the selected token.
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      </header>
+      <main className="flex items-start justify-around h-full">
+        <SwapPanel
+          label="Source"
+          amount={amount}
+          setAmount={setAmount}
+          selectedToken={sourceToken}
+          tokenList={tokenList.filter(
+            (token) =>
+              token.symbol !== sourceToken?.symbol &&
+              token.symbol !== targetToken?.symbol,
+          )}
+          onChangeAmount={(value) => setAmount(value)}
+          onChangeSelectedToken={(token) => {
+            setSourceToken(token);
+          }}
+          readOnly={false}
+        />
+        <SwapPanel
+          label="Target"
+          amount={amount}
+          selectedToken={targetToken}
+          tokenList={tokenList.filter(
+            (token) =>
+              token.symbol !== sourceToken?.symbol &&
+              token.symbol !== targetToken?.symbol,
+          )}
+          onChangeSelectedToken={(token) => {
+            setTargetToken(token);
+          }}
+          readOnly={true}
+        />
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
