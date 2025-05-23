@@ -6,14 +6,14 @@ import {
 } from "@funkit/api-base";
 
 export const useTokenDetails = (tokenInfo: TokenInfo | null) => {
-  const [price, setPrice] = useState<number | null>(null);
+  const [unitPrice, setUnitPrice] = useState<number | null>(null);
   const [decimals, setDecimals] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!tokenInfo) {
-      setPrice(null);
+      setUnitPrice(null);
       setError(null);
       setIsLoading(false);
       return;
@@ -31,7 +31,7 @@ export const useTokenDetails = (tokenInfo: TokenInfo | null) => {
           assetTokenAddress: tokenData.address,
           apiKey: import.meta.env.VITE_FUNKIT_API_KEY,
         });
-        setPrice(priceData.unitPrice);
+        setUnitPrice(priceData.unitPrice);
         setError(null);
       } catch (error) {
         setError(`Failed to fetch price data: ${error}`);
@@ -43,5 +43,5 @@ export const useTokenDetails = (tokenInfo: TokenInfo | null) => {
     fetchPrice();
   }, [tokenInfo]);
 
-  return { price, decimals, isLoading };
+  return { unitPrice, decimals, isLoading };
 };

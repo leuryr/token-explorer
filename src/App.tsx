@@ -2,6 +2,8 @@ import { useState } from "react";
 import { SwapPanel } from "./SwapPanel";
 import "./App.css";
 import { TokenInfo, TokenList } from "./types/types";
+import { useTokenDetails } from "./hooks/hooks";
+import { getTokenValue, getUsdValue } from "./utils/utils";
 
 const tokenList: TokenList = [
   { symbol: "USDC", chainId: "1" },
@@ -12,8 +14,29 @@ const tokenList: TokenList = [
 
 function App() {
   const [amount, setAmount] = useState("");
+  const [sourceModeUsd, setSourceModeUsd] = useState(true);
   const [sourceToken, setSourceToken] = useState<TokenInfo | null>(null);
   const [targetToken, setTargetToken] = useState<TokenInfo | null>(null);
+  const { unitPrice: sourceUnitPrice } = useTokenDetails(sourceToken);
+  const { unitPrice: targetUnitPrice } = useTokenDetails(targetToken);
+
+  let derivedSourceAmount = "";
+  if (sourceToken && sourceUnitPrice && amount) {
+    if (sourceModeUsd) {
+      derivedSourceAmount = getTokenValue(amount, sourceUnitPrice);
+    } else {
+      derivedSourceAmount = getUsdValue(amount, sourceUnitPrice);
+    }
+  }
+
+  let derivedTargetAmount = "";
+  if (targetToken && targetUnitPrice && amount) {
+    if (sourceModeUsd) {
+      derivedTargetAmount = getTokenValue(amount, targetUnitPrice);
+    } else {
+      derivedTargetAmount = getUsdValue(derivedSourceAmount, targetUnitPrice);
+    }
+  }
 
   return (
     <>
@@ -29,23 +52,24 @@ function App() {
       <main className="flex items-start justify-around h-full">
         <SwapPanel
           label="Source"
-          amount={amount}
-          setAmount={setAmount}
+          upstreamAmount={amount}
+          derivedAmount={derivedSourceAmount}
           selectedToken={sourceToken}
           tokenList={tokenList.filter(
             (token) =>
               token.symbol !== sourceToken?.symbol &&
               token.symbol !== targetToken?.symbol,
           )}
-          onChangeAmount={(value) => setAmount(value)}
+          setUpstreamAmount={(value) => setAmount(value)}
           onChangeSelectedToken={(token) => {
             setSourceToken(token);
           }}
-          readOnly={false}
+          modeUsd={sourceModeUsd}
         />
         <SwapPanel
           label="Target"
-          amount={amount}
+          upstreamAmount={amount}
+          derivedAmount={derivedTargetAmount}
           selectedToken={targetToken}
           tokenList={tokenList.filter(
             (token) =>
@@ -56,6 +80,7 @@ function App() {
             setTargetToken(token);
           }}
           readOnly={true}
+          modeUsd={!sourceModeUsd}
         />
       </main>
     </>
