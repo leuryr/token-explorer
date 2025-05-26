@@ -5,26 +5,27 @@ import { debouncePromise } from "./utils/utils";
 
 interface Props {
   isOpen: boolean;
-  tokens: TokenInfo[];
+  featuredTokens: TokenInfo[];
   onSelect: (token: TokenInfo) => void;
   onClose: () => void;
 }
 
 export const TokenSelectorModal: React.FC<Props> = ({
   isOpen,
-  tokens,
+  featuredTokens,
   onSelect,
   onClose,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { searching, filteredTokens, filterbySearch } = useFilterTokensBySearch();
+  const { searching, filteredTokens, filterbySearch } =
+    useFilterTokensBySearch();
   const [debouncedFilterbySearch, cancelSearch] = useMemo(
-    () => debouncePromise((term: string) => 
-      {
+    () =>
+      debouncePromise((term: string) => {
         console.log("Debounced search for:", term);
-        return filterbySearch(term)}, 1500
-      ),
-    []
+        return filterbySearch(term);
+      }, 1500),
+    [],
   );
   if (!isOpen) return null;
 
@@ -73,6 +74,22 @@ export const TokenSelectorModal: React.FC<Props> = ({
           className="w-full p-2 mb-4 bg-zinc-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => handleSearchChange(e.target.value)}
         />
+        <ul className="flex overflow-x-auto">
+          {featuredTokens.map((token) => (
+            <li
+              key={`${token.address} - ${token.chainId}`}
+              className="flex flex-col justify-center p-2 items-center hover:bg-zinc-800 cursor-pointer rounded min-w-15"
+              onClick={() => handleTokenSelect(token)}
+            >
+              <img
+                src={token.logoURI}
+                alt={token.symbol}
+                className="w-5 h-5 rounded-full"
+              />
+              <p className="text-white">{`${token.symbol}`}</p>
+            </li>
+          ))}
+        </ul>
         <ul>
           {filteredTokens.map((token) => (
             <li

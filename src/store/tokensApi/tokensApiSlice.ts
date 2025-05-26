@@ -1,9 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TokenInfo } from "../../types/types";
-
-interface TokenMetadata extends TokenInfo {
-  extensions: {};
-}
+import { TokenMetadata } from "./types/tokenApiTypes";
 
 export const tokensApi = createApi({
   reducerPath: "tokensApi",

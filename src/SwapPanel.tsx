@@ -62,7 +62,7 @@ export const SwapPanel: React.FC<SwapPanelProps> = ({
           {showOptions && (
             <TokenSelectorModal
               isOpen={showOptions}
-              tokens={tokenList}
+              featuredTokens={tokenList}
               onSelect={onChangeSelectedToken}
               onClose={() => setShowOptions(false)}
             />
