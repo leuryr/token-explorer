@@ -1,3 +1,5 @@
+import { cleanInput } from "./utils/utils";
+
 interface SwapInputProps {
   amount?: string;
   onChangeAmount?: (value: string) => void;
@@ -10,20 +12,31 @@ export const SwapInput: React.FC<SwapInputProps> = ({
   onChangeAmount,
   readOnly = false,
   label,
-}) => (
-  <input
-    id={`${label}-amount`}
-    type="text"
-    inputMode="decimal"
-    placeholder="0"
-    className="w-full border-none outline-none"
-    value={amount}
-    onChange={(e) => {
-      const value = e.target.value;
-      if (onChangeAmount) {
-        onChangeAmount(value);
-      }
-    }}
-    readOnly={readOnly}
-  />
-);
+}) => {
+  return (
+    <input
+      id={`${label}-amount`}
+      type="text"
+      inputMode="decimal"
+      placeholder="0"
+      className="w-full border-none outline-none"
+      value={amount}
+      onChange={(e) => {
+        const value = e.target.value;
+        if (onChangeAmount) {
+          const cleanedValue = cleanInput(value);
+          onChangeAmount(cleanedValue);
+        }
+      }}
+      onPaste={(e) => {
+        e.preventDefault();
+        const pastedValue = e.clipboardData.getData("text");
+        if (onChangeAmount) {
+          const cleanedValue = cleanInput(pastedValue);
+          onChangeAmount(cleanedValue);
+        }
+      }}
+      readOnly={readOnly}
+    />
+  );
+};

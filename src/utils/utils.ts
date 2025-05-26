@@ -6,7 +6,6 @@ export const getTokenValue = (usdValue: string, unitPrice: number): string => {
   return value.toFixed(4);
 };
 
-export const isValueValid = (value: string): boolean => {
-  const regex = /^\d+(\.\d{1,4})?$/;
-  return regex.test(value);
+export const cleanInput = (value: string): string => {
+  return value.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
 };
