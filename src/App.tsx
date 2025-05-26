@@ -13,16 +13,11 @@ import {
 } from "./store/swap/swapSlice";
 import { SwapPanel } from "./SwapPanel";
 import "./App.css";
-import { TokenList } from "./types/types";
+import { tokenList } from "./tokenList";
 import { useTokenDetails } from "./hooks/hooks";
 import { getTokenValue, getUsdValue } from "./utils/utils";
+import { useGetTokenListQuery } from "./store/tokensApi/tokensApiSlice";
 
-const tokenList: TokenList = [
-  { symbol: "USDC", chainId: "1" },
-  { symbol: "USDT", chainId: "137" },
-  { symbol: "ETH", chainId: "8453" },
-  { symbol: "WBTC", chainId: "1" },
-];
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +26,8 @@ function App() {
 
   const sourcePrice = useTokenDetails(source.token);
   const targetPrice = useTokenDetails(target.token);
+
+  const tokens = useGetTokenListQuery("");
 
   useEffect(() => {
     if (
@@ -84,6 +81,8 @@ function App() {
     sourcePrice.unitPrice,
     targetPrice.unitPrice,
   ]);
+
+  console.log(tokens)
 
   return (
     <>
