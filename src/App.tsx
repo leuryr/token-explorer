@@ -14,7 +14,7 @@ import {
 import { SwapPanel } from "./SwapPanel";
 import "./App.css";
 import { tokenList } from "./tokenList";
-import { useTokenDetails } from "./hooks/hooks";
+import { useTokenDetails } from "./hooks/useTokenDetails";
 import { getTokenValue, getUsdValue } from "./utils/utils";
 import { useGetTokenListQuery } from "./store/tokensApi/tokensApiSlice";
 

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { TokenInfo, TokenList } from "./types/types";
 import { InputMode } from "./store/swap/types/swapTypes";
 import { SwapButton } from "./SwapButton";
-import { SwapOptions } from "./SwapOptions";
+// import { SwapOptions } from "./SwapOptions";
 import { SwapInput } from "./SwapInput";
 import { SwapSubtext } from "./SwapSubtext";
+import { TokenSelectorModal } from "./TokenSelectorModal";
 
 interface SwapPanelProps {
   label: string;
@@ -54,13 +55,16 @@ export const SwapPanel: React.FC<SwapPanelProps> = ({
         </div>
         <div className="flex flex-col">
           <SwapButton
+            icon={selectedToken?.logoURI || ""}
             selectedSymbol={selectedToken?.symbol}
             onClick={() => setShowOptions((prev) => !prev)}
           />
           {showOptions && (
-            <SwapOptions
-              tokenList={tokenList}
-              onClick={onChangeSelectedToken}
+            <TokenSelectorModal
+              isOpen={showOptions}
+              tokens={tokenList}
+              onSelect={onChangeSelectedToken}
+              onClose={() => setShowOptions(false)}
             />
           )}
         </div>
