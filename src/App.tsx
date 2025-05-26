@@ -1,7 +1,19 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import {
+  setSourceToken,
+  setTargetToken,
+  setSourceValue,
+  setTargetValue,
+  setSourceInputMode,
+  setTargetInputMode,
+  setSourceSubtext,
+  setTargetSubtext,
+} from "./store/swap/swapSlice";
 import { SwapPanel } from "./SwapPanel";
 import "./App.css";
-import { TokenInfo, TokenList } from "./types/types";
+import { TokenList } from "./types/types";
 import { useTokenDetails } from "./hooks/hooks";
 import { getTokenValue, getUsdValue } from "./utils/utils";
 
@@ -13,30 +25,65 @@ const tokenList: TokenList = [
 ];
 
 function App() {
-  const [amount, setAmount] = useState("");
-  const [sourceModeUsd, setSourceModeUsd] = useState(true);
-  const [sourceToken, setSourceToken] = useState<TokenInfo | null>(null);
-  const [targetToken, setTargetToken] = useState<TokenInfo | null>(null);
-  const { unitPrice: sourceUnitPrice } = useTokenDetails(sourceToken);
-  const { unitPrice: targetUnitPrice } = useTokenDetails(targetToken);
+  const dispatch = useDispatch();
+  const source = useSelector((state: RootState) => state.swap.source);
+  const target = useSelector((state: RootState) => state.swap.target);
 
-  let derivedSourceAmount = "";
-  if (sourceToken && sourceUnitPrice && amount) {
-    if (sourceModeUsd) {
-      derivedSourceAmount = getTokenValue(amount, sourceUnitPrice);
-    } else {
-      derivedSourceAmount = getUsdValue(amount, sourceUnitPrice);
-    }
-  }
+  const sourcePrice = useTokenDetails(source.token);
+  const targetPrice = useTokenDetails(target.token);
 
-  let derivedTargetAmount = "";
-  if (targetToken && targetUnitPrice && amount) {
-    if (sourceModeUsd) {
-      derivedTargetAmount = getTokenValue(amount, targetUnitPrice);
+  useEffect(() => {
+    if (
+      !source.token ||
+      !target.token ||
+      !sourcePrice.unitPrice ||
+      !targetPrice.unitPrice
+    )
+      return;
+
+    let usdAmount: number;
+    if (source.inputMode === "token") {
+      usdAmount = getUsdValue(
+        parseFloat(source.inputValue || "0"),
+        sourcePrice.unitPrice,
+      );
+      dispatch(setSourceSubtext(`$${usdAmount.toFixed(2)}`));
     } else {
-      derivedTargetAmount = getUsdValue(derivedSourceAmount, targetUnitPrice);
+      usdAmount = parseFloat(source.inputValue || "0");
+      dispatch(
+        setSourceSubtext(
+          `${getTokenValue(usdAmount, sourcePrice.unitPrice)} ${source.token.symbol}`,
+        ),
+      );
     }
-  }
+
+    if (target.inputMode === "token") {
+      const targetAmount = usdAmount / targetPrice.unitPrice;
+      dispatch(
+        setTargetValue(isNaN(targetAmount) ? "" : targetAmount.toFixed(6)),
+      );
+      dispatch(
+        setTargetSubtext(
+          `$${(targetAmount * targetPrice.unitPrice).toFixed(2)}`,
+        ),
+      );
+    } else {
+      dispatch(setTargetValue(isNaN(usdAmount) ? "" : usdAmount.toFixed(2)));
+      dispatch(
+        setTargetSubtext(
+          `${getTokenValue(usdAmount, targetPrice.unitPrice)} ${target.token.symbol}`,
+        ),
+      );
+    }
+  }, [
+    source.inputValue,
+    source.inputMode,
+    target.inputMode,
+    source.token,
+    target.token,
+    sourcePrice.unitPrice,
+    targetPrice.unitPrice,
+  ]);
 
   return (
     <>
@@ -52,35 +99,36 @@ function App() {
       <main className="flex items-start justify-around h-full">
         <SwapPanel
           label="Source"
-          upstreamAmount={amount}
-          derivedAmount={derivedSourceAmount}
-          selectedToken={sourceToken}
+          inputValue={source.inputValue}
+          subtextValue={source.subtext}
+          selectedToken={source.token}
           tokenList={tokenList.filter(
             (token) =>
-              token.symbol !== sourceToken?.symbol &&
-              token.symbol !== targetToken?.symbol,
+              token.symbol !== source.token?.symbol &&
+              token.symbol !== target.token?.symbol,
           )}
-          setUpstreamAmount={(value) => setAmount(value)}
+          setInputAmount={(value) => dispatch(setSourceValue(value))}
           onChangeSelectedToken={(token) => {
-            setSourceToken(token);
+            dispatch(setSourceToken(token));
           }}
-          modeUsd={sourceModeUsd}
+          inputMode={source.inputMode}
         />
         <SwapPanel
           label="Target"
-          upstreamAmount={amount}
-          derivedAmount={derivedTargetAmount}
-          selectedToken={targetToken}
+          inputValue={target.inputValue}
+          subtextValue={target.subtext}
+          selectedToken={target.token}
           tokenList={tokenList.filter(
             (token) =>
-              token.symbol !== sourceToken?.symbol &&
-              token.symbol !== targetToken?.symbol,
+              token.symbol !== source.token?.symbol &&
+              token.symbol !== target.token?.symbol,
           )}
+          setInputAmount={(value) => dispatch(setTargetValue(value))}
           onChangeSelectedToken={(token) => {
-            setTargetToken(token);
+            dispatch(setTargetToken(token));
           }}
           readOnly={true}
-          modeUsd={!sourceModeUsd}
+          inputMode={target.inputMode}
         />
       </main>
     </>

@@ -1,8 +1,8 @@
-export const getUsdValue = (tokenAmount: string, unitPrice: number): string =>
-  (parseFloat(tokenAmount) * unitPrice).toFixed(2);
+export const getUsdValue = (tokenAmount: number, unitPrice: number): number =>
+  (tokenAmount * unitPrice);
 
-export const getTokenValue = (usdValue: string, unitPrice: number): string => {
-  const value = parseFloat(usdValue) / unitPrice;
+export const getTokenValue = (usdValue: number, unitPrice: number): string => {
+  const value = usdValue / unitPrice;
   return value.toFixed(4);
 };
 

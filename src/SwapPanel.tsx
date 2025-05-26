@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TokenInfo, TokenList } from "./types/types";
+import { InputMode } from "./store/swap/types/swapTypes";
 import { SwapButton } from "./SwapButton";
 import { SwapOptions } from "./SwapOptions";
 import { SwapInput } from "./SwapInput";
@@ -7,26 +8,26 @@ import { SwapSubtext } from "./SwapSubtext";
 
 interface SwapPanelProps {
   label: string;
-  upstreamAmount?: string;
-  derivedAmount?: string;
+  inputValue?: string;
+  subtextValue?: string;
   selectedToken: TokenInfo | null;
   tokenList: TokenList;
-  setUpstreamAmount?: (value: string) => void;
+  setInputAmount?: (value: string) => void;
   onChangeSelectedToken: (token: TokenInfo) => void;
   readOnly?: boolean;
-  modeUsd?: boolean;
+  inputMode?: InputMode;
 }
 
 export const SwapPanel: React.FC<SwapPanelProps> = ({
   label,
-  upstreamAmount = "",
-  derivedAmount = "",
+  inputValue = "",
+  subtextValue = "",
   selectedToken,
   tokenList,
-  setUpstreamAmount,
+  setInputAmount,
   onChangeSelectedToken,
   readOnly = false,
-  modeUsd,
+  inputMode,
 }) => {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -36,11 +37,11 @@ export const SwapPanel: React.FC<SwapPanelProps> = ({
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col items-start">
           <div className="flex text-2xl font-semibold">
-            {modeUsd ? <label htmlFor={`${label}-amount`}>$</label> : null}
+            {inputMode === "usd" ? <label htmlFor={`${label}-amount`}>$</label> : null}
             <SwapInput
-              amount={label === "Source" ? upstreamAmount : derivedAmount}
+              amount={inputValue}
               onChangeAmount={
-                label === "Source" ? setUpstreamAmount : undefined
+                label === "Source" ? setInputAmount : undefined
               }
               label={label}
               readOnly={readOnly}
@@ -48,8 +49,7 @@ export const SwapPanel: React.FC<SwapPanelProps> = ({
           </div>
           <SwapSubtext
             selectedToken={selectedToken}
-            value={label === "Source" ? derivedAmount : upstreamAmount}
-            modeUsd={modeUsd}
+            value={subtextValue}
           />
         </div>
         <div className="flex flex-col">
