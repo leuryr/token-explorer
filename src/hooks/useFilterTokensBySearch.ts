@@ -7,7 +7,7 @@ const fuseOptions: IFuseOptions<TokenInfo> = {
   threshold: 0.3,
   distance: 0,
   ignoreDiacritics: true,
-  keys: ["symbol", "address", "chainId"],
+  keys: ["symbol", "address"],
 };
 
 export const useFilterTokensBySearch = () => {
