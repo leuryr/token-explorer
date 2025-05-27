@@ -24,57 +24,53 @@ function App() {
   const targetPrice = useTokenDetails(target.token);
 
   useEffect(() => {
-    if (
-      !source.token ||
-      !target.token ||
-      !sourcePrice.unitPrice ||
-      !targetPrice.unitPrice
-    )
-      return;
+  if (!source.token || !sourcePrice.unitPrice) return;
 
-    let usdAmount: number;
-    if (source.inputMode === "token") {
-      usdAmount = getUsdValue(
-        parseFloat(source.inputValue || "0"),
-        sourcePrice.unitPrice,
-      );
-      dispatch(setSourceSubtext(`$${usdAmount.toFixed(2)}`));
-    } else {
-      usdAmount = parseFloat(source.inputValue || "0");
-      dispatch(
-        setSourceSubtext(
-          `${getTokenValue(usdAmount, sourcePrice.unitPrice)} ${source.token.symbol}`,
-        ),
-      );
-    }
+  let usdAmount: number;
+  if (source.inputMode === "token") {
+    usdAmount = getUsdValue(
+      parseFloat(source.inputValue || "0"),
+      sourcePrice.unitPrice,
+    );
+    dispatch(setSourceSubtext(`$${usdAmount.toFixed(2)}`));
+  } else {
+    usdAmount = parseFloat(source.inputValue || "0");
+    dispatch(
+      setSourceSubtext(
+        `${getTokenValue(usdAmount, sourcePrice.unitPrice)} ${source.token.symbol}`,
+      ),
+    );
+  }
 
-    if (target.inputMode === "token") {
-      const targetAmount = usdAmount / targetPrice.unitPrice;
-      dispatch(
-        setTargetValue(isNaN(targetAmount) ? "" : targetAmount.toFixed(6)),
-      );
-      dispatch(
-        setTargetSubtext(
-          `$${(targetAmount * targetPrice.unitPrice).toFixed(2)}`,
-        ),
-      );
-    } else {
-      dispatch(setTargetValue(isNaN(usdAmount) ? "" : usdAmount.toFixed(2)));
-      dispatch(
-        setTargetSubtext(
-          `${getTokenValue(usdAmount, targetPrice.unitPrice)} ${target.token.symbol}`,
-        ),
-      );
-    }
-  }, [
-    source.inputValue,
-    source.inputMode,
-    target.inputMode,
-    source.token,
-    target.token,
-    sourcePrice.unitPrice,
-    targetPrice.unitPrice,
-  ]);
+  if (!target.token || !targetPrice.unitPrice) return;
+
+  if (target.inputMode === "token") {
+    const targetAmount = usdAmount / targetPrice.unitPrice;
+    dispatch(
+      setTargetValue(isNaN(targetAmount) ? "" : targetAmount.toFixed(6)),
+    );
+    dispatch(
+      setTargetSubtext(
+        `$${(targetAmount * targetPrice.unitPrice).toFixed(2)}`,
+      ),
+    );
+  } else {
+    dispatch(setTargetValue(isNaN(usdAmount) ? "" : usdAmount.toFixed(2)));
+    dispatch(
+      setTargetSubtext(
+        `${getTokenValue(usdAmount, targetPrice.unitPrice)} ${target.token.symbol}`,
+      ),
+    );
+  }
+}, [
+  source.inputValue,
+  source.inputMode,
+  target.inputMode,
+  source.token,
+  target.token,
+  sourcePrice.unitPrice,
+  targetPrice.unitPrice,
+]);
 
   return (
     <div className="h-full gap-10 flex flex-col items-center justify-start bg-white dark:bg-black">
