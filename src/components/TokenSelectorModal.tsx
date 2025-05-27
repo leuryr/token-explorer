@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { TokenInfo } from "./types/types";
-import { useFilterTokensBySearch } from "./hooks/useFilterTokensBySearch";
-import { debouncePromise } from "./utils/utils";
-import Xmark from "./assets/icons/x-mark.svg?react";
+import { TokenInfo } from "../types/types";
+import { useFilterTokensBySearch } from "../hooks/useFilterTokensBySearch";
+import { debouncePromise } from "../utils/utils";
+import Xmark from "../assets/icons/x-mark.svg?react";
 
 interface Props {
   isOpen: boolean;
@@ -69,7 +69,7 @@ export const TokenSelectorModal: React.FC<Props> = ({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-white text-xl">Select Token</h2>
-          <Xmark className="cursor-pointer w-5 h-5 fill-white" onClick={() => onClose()}/>
+          <Xmark className="cursor-pointer w-5 h-5 fill-white hover:fill-white/25 " onClick={() => onClose()}/>
         </div>
         <input
           type="text"

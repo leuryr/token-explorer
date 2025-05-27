@@ -1,4 +1,4 @@
-import { TokenList } from "./types/types";
+import { TokenList } from "../types/types";
 
 export const tokenList: TokenList = [
   {

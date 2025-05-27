@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { TokenInfo, TokenList } from "./types/types";
-import { InputMode } from "./store/swap/types/swapTypes";
+import { TokenInfo, TokenList } from "../types/types";
+import { InputMode } from "../store/swap/types/swapTypes";
 import { SwapButton } from "./SwapButton";
-// import { SwapOptions } from "./SwapOptions";
 import { SwapInput } from "./SwapInput";
 import { TokenSelectorModal } from "./TokenSelectorModal";
 
@@ -36,7 +35,7 @@ export const SwapPanel: React.FC<SwapPanelProps> = ({
       <div className="flex flex-col xs:flex-row justify-between items-center w-full">
         <div className="flex flex-col items-start gap-3">
           <h3 className="text-xl font-semibold self-start">{label}</h3>
-          <div className="flex text-4xl font-semibold">
+          <div className="flex shrink text-3xl font-semibold">
             {inputMode === "usd" ? (
               <label htmlFor={`${label}-amount`}>$</label>
             ) : null}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
+import { RootState } from "../store/store";
 import {
   setSourceToken,
   setTargetToken,
@@ -8,12 +8,11 @@ import {
   setTargetValue,
   setSourceSubtext,
   setTargetSubtext,
-} from "./store/swap/swapSlice";
-import { SwapPanel } from "./SwapPanel";
-import "./App.css";
-import { tokenList } from "./tokenList";
-import { useTokenDetails } from "./hooks/useTokenDetails";
-import { getTokenValue, getUsdValue } from "./utils/utils";
+} from "../store/swap/swapSlice";
+import { SwapPanel } from "../components/SwapPanel";
+import { tokenList } from "../utils/tokenList";
+import { useTokenDetails } from "../hooks/useTokenDetails";
+import { getTokenValue, getUsdValue } from "../utils/utils";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,53 +23,53 @@ function App() {
   const targetPrice = useTokenDetails(target.token);
 
   useEffect(() => {
-  if (!source.token || !sourcePrice.unitPrice) return;
+    if (!source.token || !sourcePrice.unitPrice) return;
 
-  let usdAmount: number;
-  if (source.inputMode === "token") {
-    usdAmount = getUsdValue(
-      parseFloat(source.inputValue || "0"),
-      sourcePrice.unitPrice,
-    );
-    dispatch(setSourceSubtext(`$${usdAmount.toFixed(2)}`));
-  } else {
-    usdAmount = parseFloat(source.inputValue || "0");
-    dispatch(
-      setSourceSubtext(
-        `${getTokenValue(usdAmount, sourcePrice.unitPrice)} ${source.token.symbol}`,
-      ),
-    );
-  }
+    let usdAmount: number;
+    if (source.inputMode === "token") {
+      usdAmount = getUsdValue(
+        parseFloat(source.inputValue || "0"),
+        sourcePrice.unitPrice,
+      );
+      dispatch(setSourceSubtext(`$${usdAmount.toFixed(2)}`));
+    } else {
+      usdAmount = parseFloat(source.inputValue || "0");
+      dispatch(
+        setSourceSubtext(
+          `${getTokenValue(usdAmount, sourcePrice.unitPrice)} ${source.token.symbol}`,
+        ),
+      );
+    }
 
-  if (!target.token || !targetPrice.unitPrice) return;
+    if (!target.token || !targetPrice.unitPrice) return;
 
-  if (target.inputMode === "token") {
-    const targetAmount = usdAmount / targetPrice.unitPrice;
-    dispatch(
-      setTargetValue(isNaN(targetAmount) ? "" : targetAmount.toFixed(6)),
-    );
-    dispatch(
-      setTargetSubtext(
-        `$${(targetAmount * targetPrice.unitPrice).toFixed(2)}`,
-      ),
-    );
-  } else {
-    dispatch(setTargetValue(isNaN(usdAmount) ? "" : usdAmount.toFixed(2)));
-    dispatch(
-      setTargetSubtext(
-        `${getTokenValue(usdAmount, targetPrice.unitPrice)} ${target.token.symbol}`,
-      ),
-    );
-  }
-}, [
-  source.inputValue,
-  source.inputMode,
-  target.inputMode,
-  source.token,
-  target.token,
-  sourcePrice.unitPrice,
-  targetPrice.unitPrice,
-]);
+    if (target.inputMode === "token") {
+      const targetAmount = usdAmount / targetPrice.unitPrice;
+      dispatch(
+        setTargetValue(isNaN(targetAmount) ? "" : targetAmount.toFixed(6)),
+      );
+      dispatch(
+        setTargetSubtext(
+          `$${(targetAmount * targetPrice.unitPrice).toFixed(2)}`,
+        ),
+      );
+    } else {
+      dispatch(setTargetValue(isNaN(usdAmount) ? "" : usdAmount.toFixed(2)));
+      dispatch(
+        setTargetSubtext(
+          `${getTokenValue(usdAmount, targetPrice.unitPrice)} ${target.token.symbol}`,
+        ),
+      );
+    }
+  }, [
+    source.inputValue,
+    source.inputMode,
+    target.inputMode,
+    source.token,
+    target.token,
+    sourcePrice.unitPrice,
+    targetPrice.unitPrice,
+  ]);
 
   return (
     <div className="h-full gap-10 flex flex-col items-center justify-start bg-white dark:bg-black">

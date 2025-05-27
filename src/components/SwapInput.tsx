@@ -1,4 +1,4 @@
-import { cleanInput } from "./utils/utils";
+import { cleanInput } from "../utils/utils";
 
 interface SwapInputProps {
   amount?: string;
