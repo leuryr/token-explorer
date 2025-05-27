@@ -36,5 +36,5 @@ export const useTokenDetails = (tokenInfo: TokenInfo | null) => {
     fetchPrice();
   }, [tokenInfo]);
 
-  return { unitPrice, isLoading };
+  return { unitPrice, isLoading, error };
 };

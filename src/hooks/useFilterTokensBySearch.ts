@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TokenInfo, TokenList } from "../types/types";
 import Fuse, { IFuseOptions } from "fuse.js";
 import { useGetTokenListQuery } from "../store/tokensApi/tokensApiSlice";

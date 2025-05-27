@@ -18,7 +18,7 @@ export const TokenSelectorModal: React.FC<Props> = ({
   onClose,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { searching, filteredTokens, filterbySearch } =
+  const { filteredTokens, filterbySearch } =
     useFilterTokensBySearch();
   const [debouncedFilterbySearch, cancelSearch] = useMemo(
     () =>
