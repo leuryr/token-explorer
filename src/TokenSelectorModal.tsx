@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { TokenInfo } from "./types/types";
 import { useFilterTokensBySearch } from "./hooks/useFilterTokensBySearch";
 import { debouncePromise } from "./utils/utils";
+import Xmark from "./assets/icons/x-mark.svg?react";
 
 interface Props {
   isOpen: boolean;
@@ -61,24 +62,27 @@ export const TokenSelectorModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex flex-1 items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex flex-1 items-center justify-center z-50 p-4">
       <div
-        className="bg-zinc-900 p-6 rounded-xl w-80 max-h-[80vh] overflow-y-auto"
+        className="bg-neutral-500 dark:bg-zinc-900 p-6 rounded-2xl w-100 max-h-[80vh] overflow-y-auto"
         ref={modalRef}
       >
-        <h2 className="text-white text-lg mb-4">Select Token</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-white text-xl">Select Token</h2>
+          <Xmark className="cursor-pointer w-5 h-5 fill-white" onClick={() => onClose()}/>
+        </div>
         <input
           type="text"
-          placeholder="Search tokens..."
+          placeholder="Search more tokens..."
           value={searchTerm}
-          className="w-full p-2 mb-4 bg-zinc-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full py-2 px-4 mb-4 bg-zinc-800 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => handleSearchChange(e.target.value)}
         />
         <ul className="flex overflow-x-auto">
           {featuredTokens.map((token) => (
             <li
               key={`${token.address} - ${token.chainId}`}
-              className="flex flex-col justify-center p-2 items-center hover:bg-zinc-800 cursor-pointer rounded min-w-15"
+              className="flex flex-col gap-2 justify-center p-2 items-center hover:bg-zinc-800 cursor-pointer rounded min-w-15"
               onClick={() => handleTokenSelect(token)}
             >
               <img
@@ -106,12 +110,6 @@ export const TokenSelectorModal: React.FC<Props> = ({
             </li>
           ))}
         </ul>
-        <button
-          onClick={onClose}
-          className="mt-4 text-sm text-zinc-400 underline"
-        >
-          Close
-        </button>
       </div>
     </div>
   );

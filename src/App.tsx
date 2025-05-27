@@ -6,8 +6,6 @@ import {
   setTargetToken,
   setSourceValue,
   setTargetValue,
-  setSourceInputMode,
-  setTargetInputMode,
   setSourceSubtext,
   setTargetSubtext,
 } from "./store/swap/swapSlice";
@@ -16,8 +14,6 @@ import "./App.css";
 import { tokenList } from "./tokenList";
 import { useTokenDetails } from "./hooks/useTokenDetails";
 import { getTokenValue, getUsdValue } from "./utils/utils";
-import { useGetTokenListQuery } from "./store/tokensApi/tokensApiSlice";
-
 
 function App() {
   const dispatch = useDispatch();
@@ -26,8 +22,6 @@ function App() {
 
   const sourcePrice = useTokenDetails(source.token);
   const targetPrice = useTokenDetails(target.token);
-
-  const tokens = useGetTokenListQuery("");
 
   useEffect(() => {
     if (
@@ -82,12 +76,10 @@ function App() {
     targetPrice.unitPrice,
   ]);
 
-  console.log(tokens)
-
   return (
-    <>
-      <header className="flex flex-col items-center justify-end min-h-[20vh]">
-        <h1 className="text-2xl">Token Price Explorer</h1>
+    <div className="h-full gap-10 flex flex-col items-center justify-start bg-white dark:bg-black">
+      <header className="flex flex-col items-center justify-end min-h-[20vh] text-center">
+        <h1 className="text-4xl">Token Price Explorer</h1>
         <p>
           Use the interface below to explore the price of different tokens.
           <br />
@@ -95,7 +87,7 @@ function App() {
           in the selected token.
         </p>
       </header>
-      <main className="flex items-start justify-around h-full">
+      <main className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-[90vw] mx-auto">
         <SwapPanel
           label="Source"
           inputValue={source.inputValue}
@@ -130,7 +122,7 @@ function App() {
           inputMode={target.inputMode}
         />
       </main>
-    </>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import CaretDown from "./assets/icons/caret-down.svg?react";
+import AngleDown from "./assets/icons/angle-down.svg?react";
 
 interface SwapButtonProps {
   icon: string;
@@ -14,7 +14,7 @@ export const SwapButton: React.FC<SwapButtonProps> = ({
 }) => {
   return (
     <button
-      className="flex gap-2 cursor-pointer items-center bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-gray-500 transition duration-200"
+      className="min-w-[132px] flex shrink-0 gap-2 cursor-pointer items-center bg-zinc-800 text-white font-semibold py-2.5 px-4 rounded-full shadow-md hover:bg-zinc-500 transition duration-200"
       onClick={onClick}
     >
       {icon && (
@@ -25,7 +25,7 @@ export const SwapButton: React.FC<SwapButtonProps> = ({
         />
       )}
       {selectedSymbol ? `${selectedSymbol}` : "Select Token"}
-      <CaretDown className="w-4 h-4 fill-white" />
+      <AngleDown className="w-4 h-4 fill-white" />
     </button>
   );
 };

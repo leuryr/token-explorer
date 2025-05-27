@@ -11,6 +11,7 @@
   --color-lgray-3: rgba(0, 0, 0, 0.3);
   --color-off-white: #f8f8f8;
   --color-off-black: #1e1e1e;
+  --breakpoint-xs: 360px;
 }
 
 :root {
@@ -34,3 +35,12 @@
     background-color: --white;
   }
 }
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
