@@ -1,21 +1,16 @@
-# React + TypeScript + Vite
+# Token Price Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This web app is a simple interface for users to get a sense for token exchange rates between a source and target token.
 
-While this project uses React, Vite supports many popular JS frameworks. [See all the supported frameworks](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
-
-## Deploy Your Own
-
-Deploy your own Vite project with Vercel.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/framework-boilerplates/vite-react&template=vite-react)
-
-_Live Example: https://vite-react-example.vercel.app_
-
-### Deploying From Your Terminal
-
-You can deploy your new Vite project with a single command from your terminal using [Vercel CLI](https://vercel.com/download):
-
+### Running the app locally
+1. Clone the app to a local directory, and install the dependencies to prepare for a local run:
 ```shell
-$ vercel
+npm install
 ```
+2. This app makes use of the [`@funkit/api-base`](https://www.npmjs.com/package/@funkit/api-base) API/package, and requires an API key, accessed by the app through an environment variable. The Vercel deployment handles this variable on the production side. For running the app locally, create a `.env` file (I used `.env.local`), at the root of the project folder, with the API key in a variable named `VITE_FUNKIT_API_KEY` before proceeding.
+
+3. Run the app with the script:
+```shell
+npm run dev
+```
+4. The terminal window will display the local URL the app is running at. Visit the link in your browser to view.
