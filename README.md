@@ -19,7 +19,7 @@ npm run dev
 ### Token List
 I assumed list support need not be limited to the inital tokens provided (which I added as a "featured tokens" list in the token selector modal). So I looked into fetching a token list from an external source.
 
-Given the params of the `getAssetErc20ByChainAndSymbol` method `{ chainId, symbol, ...options }`, I knew I needed to find one that provided publicly availbale info with the `chainId` and `symbol` for each token, but most of them provided more than that (including icon URIs 🎉). Since it seemed like the method was only needed, in the path to getting price info, to get the a token's blockchain address, I assumed it would be ok to forego the method entirely since the fetched token list I went with provided those details already.
+Given the params of the `getAssetErc20ByChainAndSymbol` method `{ chainId, symbol, ...options }`, I knew I needed to find one that provided publicly availbale info with the `chainId` and `symbol` for each token, but most of them provided more than that (including icon URIs 🎉). Since it seemed like the method was only needed, in the path to getting price info, to get a token's blockchain address, I assumed it would be ok to forego the method entirely since the fetched token list I went with provided those details already.
 
 Additionally, I implemented RTK Query to cache the returned list and prevent unnecessary refetching while using the app.
 
